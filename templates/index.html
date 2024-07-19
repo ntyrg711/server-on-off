@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- タイトル -->
+    <title>サーバーOn/Off</title>  
+</head>
+
+<!-- コンテンツ内容 -->
+<body>
+    <p>サーバーの状態:{{ status }}</p>
+    <form action="/" method="POST">
+        <p><input type="submit" value="ON/OFF"></p>
+    </form>
+    {{ txt }}
+    <h3>ここでオンとオフを切り替えるのはコンセントからの電力供給であるので短時間のうちに切り替えまくるとサーバーが壊れる可能性があるので注意してください。</h3>
+</body>
+
+</html>
