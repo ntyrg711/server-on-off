@@ -71,7 +71,7 @@ def index():
         else:
             status = "unknown"
     else:
-        status = "unknown(status_code isn't 200)" + response.status_code
+        status = "unknown(status_code isn't 200)" + str(response.status_code)
     return render_template('index.html', txt=content, status=status)
 
 @app.route("/", methods=['POST'])
