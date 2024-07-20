@@ -31,34 +31,39 @@ def make_nonce():
 app = Flask(__name__)
 content = ""
 # SwitchBotアプリから取得
-secret_key = "41bfed478a93a262cbd8cb9bb9832f68"
+secret = "41bfed478a93a262cbd8cb9bb9832f68"
 token = "b7206a73a308c7f96aaea78396f739f1d81cbb90d3505ef7db54b33321fba09ba74f132f0ff0b130aa4184ec4561c3f1"
 device_id = "DCDA0CDC5EC2"
 
-# 必要なパラメータを作成する
-secret_key = make_secret(secret_key)
-t = make_t()
-nonce = make_nonce()
-sign = make_sign(secret_key, t, nonce)
+def make_headers():
+    global secret
+    global token
+
+    # 必要なパラメータを作成する
+    secret_key = make_secret(secret)
+    t = make_t()
+    nonce = make_nonce()
+    sign = make_sign(secret_key, t, nonce)
+
+    # API header作成
+    headers = {
+        "Authorization": token,
+        "sign": sign,
+        "t": t,
+        "nonce": nonce,
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    return headers
 
 # URL指定
 url = "https://api.switch-bot.com/v1.1/devices/{}/status".format(device_id)
 
-# API header作成
-headers = {
-    "Authorization": token,
-    "sign": sign,
-    "t": t,
-    "nonce": nonce,
-    "Content-Type": "application/json; charset=utf-8"
-}
-
-
 @app.route("/")
 def index():
     global url
-    global headers
     global content
+
+    headers = make_headers()
 
     response = requests.get(url, headers=headers)
 
@@ -78,13 +83,9 @@ def index():
 def result():
     global content
     global url
-    global headers
     global device_id
-    global secret_key
-    global token
-    global t
-    global nonce
-    global sign
+
+    headers = make_headers()
 
     # リクエストのレスポンス処理（jsonへの変更とデータ型の指定）
     def get_value():
